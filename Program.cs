@@ -29,11 +29,16 @@ namespace PMM_HW
 
         Random r;
 
-        public void feltolt() 
+        public void ADC() 
         {
             for (int i = 0; i < db; i++)
             {
                 tomb[i] = r.NextDouble() * (max - min) + min;
+                Console.Write("A generált érték: "+tomb[i]+"\t");
+                if (min < 0) tomb[i] = (tomb[i] / max) * (Math.Pow(2, binarycode) / 2);
+                else tomb[i] = (tomb[i] / max) * Math.Pow(2, binarycode);
+                Console.WriteLine("A kvantált érték: "+tomb[i]);
+
             }
         }
 
@@ -82,7 +87,7 @@ namespace PMM_HW
 
        //kvantálás: generált értéket elosztom a megadható legnagyobb értékkel, és azt megszorzom a megadott felbontás értékével (vagy annak a felével)
 
-        public void getquanted()
+      /*  public void getquanted()
         {
             if (min < 0) //ha a generált legkisebb érték kevesebb, mint 0 (azaz negatív szám), akkor a teljes felbontáson a pozitív és negatív tartomány is osztozik
             {
@@ -99,7 +104,7 @@ namespace PMM_HW
 
                 }
             }
-        }
+        }*/
 
     }
     class Program
@@ -113,7 +118,7 @@ namespace PMM_HW
             double min;
             double max;
 
-            Console.WriteLine("Kérem adja meg, a tömb elemszámát!");
+            Console.WriteLine("Kérem adja meg, a tömb elemszámát(Mintavételezések száma)!");
             db = int.Parse(Console.ReadLine());
             Console.WriteLine("Kérem adja meg a legmagasabb értéket!");
             max = double.Parse(Console.ReadLine());
@@ -121,16 +126,17 @@ namespace PMM_HW
             min = double.Parse(Console.ReadLine());
 
             Init i = new Init(max, min, db);
-            Console.WriteLine("A megadott paraméterek alapján generált adatok");
-            i.feltolt();
-            i.kiir();
+            // Console.WriteLine("A megadott paraméterek alapján generált adatok");
             Console.WriteLine();
             Console.WriteLine("Kérem adja meg az ADC felbontását (bit)!");
             i.getResolution();
             i.getLsb();
-            i.getquanted();
-            Console.WriteLine("A kvantált tömb elemei: ");
-            i.kiir();
+            i.ADC();
+           // i.kiir();
+           
+           // i.getquanted();
+          //  Console.WriteLine("A kvantált tömb elemei: ");
+          //  i.kiir();
            
            
 
