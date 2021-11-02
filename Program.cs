@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PMM_HW
 {
-    class Init
+    class Init //értékadás+számítások
     {
         public Init(double max, double min, int db)
         {
@@ -24,8 +24,6 @@ namespace PMM_HW
         public double min { get; set; }
         public int db { get; set; }
         public int binarycode { get; set; }
-        public double maximum { get; set; }
-        public double minimum { get; set; }
         public double resolution { get; set; }
         public string[] binary { get; set; }
         public string seged { get; set; }
@@ -36,84 +34,37 @@ namespace PMM_HW
         {
             for (int i = 0; i < db; i++)
             {
-                tomb[i] = r.NextDouble() * (max - min) + min;
+                tomb[i] = r.NextDouble() * (max - min) + min; //pszeudorandom szám generálás
                 Console.Write("A generált érték: "+tomb[i]+"\t");
 
-                if (min < 0) tomb[i] = (tomb[i] / max) * (Math.Pow(2, binarycode) / 2);
+                if (min < 0) tomb[i] = (tomb[i] / max) * (Math.Pow(2, binarycode) / 2); //kvantált érték
                 else tomb[i] = (tomb[i] / max) * Math.Pow(2, binarycode);
                 Console.Write("A kvantált érték: "+tomb[i]+"\t");
 
-                seged = Convert.ToString(Convert.ToInt32(tomb[i]), 2);
+                seged = Convert.ToString(Convert.ToInt32(tomb[i]), 2); //bináris kód
                 binary[i] = seged;
                 Console.WriteLine("A bináris kód: "+binary[i]);
 
             }
         }
 
-        public void kiir()
-        {
-            foreach (double szam in tomb)
-            {
-                Console.WriteLine(szam);
-            }
-        }
 
-       /* public void kvantal()
-        {
-             minimum = max; //minimumkiválasztás tétele
-            for (int i = 0; i < db; i++)
-            {
-                if (tomb[i] < minimum) minimum = tomb[i];
-            }
-
-            for (int i = 0; i < db; i++) //az a célom, hogy csak pozitív előjelű számok alkossák a tömböt
-            {
-                if (minimum >= 0) tomb[i] -= minimum;
-                else tomb[i] += minimum * -1;
-            }
-             maximum = 0; // maximumkiválasztás a felbontás meghatározásához
-            for (int i = 0; i < db; i++)
-            {
-                if (tomb[i] > maximum) maximum = tomb[i];
-            }
-        }
-       */
+       
         public void getResolution() //felbontás
         {
             Console.WriteLine();
             binarycode = int.Parse(Console.ReadLine());
             Console.WriteLine("Az ADC felbontása: 2^"+binarycode+" ("+ Math.Pow(2, binarycode) + ").");
-            //return binarycode;
             
         }
 
         public void getLsb() // LSB legkisebb helyiértékű bit (Least Significant Bit) 
         {
             resolution = (max - min) / (Math.Pow(2, binarycode)-1);
-            Console.WriteLine("Egy bit legkisebb helyiértéke: "+resolution/*+"V, ~" +resolution*1000+"mV")*/);
+            Console.WriteLine("Egy bit legkisebb helyiértéke: "+resolution);
         }
 
-       //kvantálás: generált értéket elosztom a megadható legnagyobb értékkel, és azt megszorzom a megadott felbontás értékével (vagy annak a felével)
-
-      /*  public void getquanted()
-        {
-            if (min < 0) //ha a generált legkisebb érték kevesebb, mint 0 (azaz negatív szám), akkor a teljes felbontáson a pozitív és negatív tartomány is osztozik
-            {
-                for (int i = 0; i < db; i++)
-                {
-                    tomb[i] = (tomb[i] /max)*(Math.Pow(2, binarycode) / 2);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < db; i++)
-                {
-                    tomb[i] = (tomb[i] / max) * Math.Pow(2, binarycode);
-
-                }
-            }
-        }*/
-
+       
     }
     class Program
     {
@@ -126,6 +77,7 @@ namespace PMM_HW
             double min;
             double max;
 
+            //Adatok felvétele
             Console.WriteLine("Kérem adja meg, a tömb elemszámát(Mintavételezések száma)!");
             db = int.Parse(Console.ReadLine());
             Console.WriteLine("Kérem adja meg a legmagasabb értéket!");
@@ -134,22 +86,15 @@ namespace PMM_HW
             min = double.Parse(Console.ReadLine());
 
             Init i = new Init(max, min, db);
-            // Console.WriteLine("A megadott paraméterek alapján generált adatok");
             Console.WriteLine();
             Console.WriteLine("Kérem adja meg az ADC felbontását (bit)!");
             i.getResolution();
             i.getLsb();
+
+            //ADC metódus meghívása
             i.ADC();
-           // i.kiir();
-           
-           // i.getquanted();
-          //  Console.WriteLine("A kvantált tömb elemei: ");
-          //  i.kiir();
            
            
-
-
-
 
             Console.ReadKey();
         }
