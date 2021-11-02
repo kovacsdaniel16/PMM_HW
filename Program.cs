@@ -15,6 +15,7 @@ namespace PMM_HW
             this.min = min;
             this.db = db;
             r = new Random();
+            binary = new string[db];
 
         }
 
@@ -26,6 +27,8 @@ namespace PMM_HW
         public double maximum { get; set; }
         public double minimum { get; set; }
         public double resolution { get; set; }
+        public string[] binary { get; set; }
+        public string seged { get; set; }
 
         Random r;
 
@@ -35,9 +38,14 @@ namespace PMM_HW
             {
                 tomb[i] = r.NextDouble() * (max - min) + min;
                 Console.Write("A generált érték: "+tomb[i]+"\t");
+
                 if (min < 0) tomb[i] = (tomb[i] / max) * (Math.Pow(2, binarycode) / 2);
                 else tomb[i] = (tomb[i] / max) * Math.Pow(2, binarycode);
-                Console.WriteLine("A kvantált érték: "+tomb[i]);
+                Console.Write("A kvantált érték: "+tomb[i]+"\t");
+
+                seged = Convert.ToString(Convert.ToInt32(tomb[i]), 2);
+                binary[i] = seged;
+                Console.WriteLine("A bináris kód: "+binary[i]);
 
             }
         }
